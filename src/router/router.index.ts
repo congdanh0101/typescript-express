@@ -1,9 +1,9 @@
 import express, { ErrorRequestHandler } from 'express';
 // import AuthRouter from './AuthRouter';
+import BaseRouter from '../interfaces/router.inteface';
 import AuthRouter from '../modules/auth/auth.route';
 import dotenv from 'dotenv';
 import errorHandler from '../middleware/error.middleware';
-import { routers } from './router.config';
 
 dotenv.config();
 
@@ -20,6 +20,8 @@ dotenv.config();
 // 		this.express.use(`${this.url}/auth`, AuthRouter);
 // 	}
 // }
+
+const routers: BaseRouter[] = [AuthRouter];
 
 export default function router(app: express.Application, url: string) {
 	const router = express.Router();

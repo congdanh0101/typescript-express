@@ -3,9 +3,12 @@ import { UserDto } from '../../dto/UserDTO';
 import UserRepository from '../../repository/UserRepository';
 import { authentication, random } from '../../helpers';
 import { User } from '../../model/Users';
+import { RegisterRequest } from '../../dto/auth/register.request';
+import { RegisterResponse } from '../../dto/auth/register.response';
+import { LoginRequest } from '../../dto/auth/login.request';
 
 class AuthService {
-	public register = async (userDto: UserDto) => {
+	public register = async (userDto: RegisterRequest) => {
 		try {
 			console.log('Auth service');
 			if (!userDto.email || !userDto.password || !userDto.username) {
@@ -40,7 +43,41 @@ class AuthService {
 			// 		password: authentication(salt, userDto.password)
 			// 	}
 			// });
+
 			return saved;
+		} catch (error) {
+			throw error;
+		}
+	};
+
+	public login = async (loginRequest: LoginRequest) => {
+		try {
+			if (!loginRequest.email || !loginRequest.password) {
+				throw createHttpError.BadRequest(
+					'Please input email or password'
+				);
+			}
+
+			const existedUser = await UserRepository.getUserByEmail(
+				loginRequest.email
+			).select('+authentication.salt + authentication.password');
+
+			if (!existedUser) {
+				throw createHttpError.BadRequest(
+					'Email or password is invalid, please try again!'
+				);
+			}
+
+			// const expectedHash = authentication(
+			// 	existedUser.authentication?.salt,
+			// 	loginRequest.password
+			// );
+
+			// if (existedUser.authentication?.password !== expectedHash) {
+			// 	throw createHttpError.BadRequest(
+			// 		'Email or password is invalid, please try again!'
+			// 	);
+			// }
 		} catch (error) {
 			throw error;
 		}

@@ -4,6 +4,9 @@ import UserRepository from '../../repository/UserRepository';
 import { authentication, random } from '../../helpers';
 import AuthService from './auth.service';
 import createHttpError from 'http-errors';
+import { RegisterRequest } from '../../dto/auth/register.request';
+import { RegisterResponse } from '../../dto/auth/register.response';
+import { LoginRequest } from '../../dto/auth/login.request';
 
 class AuthController {
 	private readonly authService = new AuthService();
@@ -14,16 +17,25 @@ class AuthController {
 		next: NextFunction
 	) => {
 		try {
-			const data: UserDto = req.body;
+			const data: RegisterRequest = req.body;
 			console.log(data);
 
 			const user = await this.authService.register(data);
 
-			return res.status(200).json(user).end();
+			const resBody: RegisterResponse = user as RegisterResponse;
+			console.log(`response body ${resBody}`);
+			console.log(`username ${resBody.username}`);
+			console.log(`email ${resBody.email}`);
+			console.log(`authentication ${resBody.authentication}`);
+			return res.status(200).json(resBody).end();
 		} catch (error) {
 			console.log(error);
 			return next(error);
 		}
+	};
+
+	public login = (req: Request, res: Response, next: NextFunction) => {
+		const data : LoginRequest = req.body;
 	};
 
 	public helloWord = (req: Request, res: Response, next: NextFunction) => {
