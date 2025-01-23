@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { UserDto } from '../../dto/UserDTO';
-import UserRepository from '../../repository/UserRepository';
-import { authentication, random } from '../../helpers';
+
 import AuthService from './auth.service';
 import createHttpError from 'http-errors';
 import { RegisterRequest } from '../../dto/auth/register.request';
@@ -10,7 +9,6 @@ import { LoginRequest } from '../../dto/auth/login.request';
 
 class AuthController {
 	private readonly authService = new AuthService();
-
 	public register = async (
 		req: Request,
 		res: Response,
@@ -24,9 +22,9 @@ class AuthController {
 
 			const resBody: RegisterResponse = user as RegisterResponse;
 			console.log(`response body ${resBody}`);
-			console.log(`username ${resBody.username}`);
-			console.log(`email ${resBody.email}`);
-			console.log(`authentication ${resBody.authentication}`);
+			// console.log(`username ${resBody.username}`);
+			// console.log(`email ${resBody.email}`);
+			// console.log(`authentication ${resBody.authentication}`);
 			return res.status(200).json(resBody).end();
 		} catch (error) {
 			console.log(error);

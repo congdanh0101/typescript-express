@@ -1,19 +1,16 @@
-interface RegisterAuthentication {
-	password: string;
-	salt: string;
-}
+
 
 export class RegisterResponse {
 	private _username?: string;
 	private _email?: string;
-	private _authentication?: RegisterAuthentication;
+	private _password?: string;
 
 	constructor(
 		username: string,
 		email: string,
-		authentication: RegisterAuthentication
+		password: string
 	) {
-		this._authentication = authentication;
+		this._password = password;
 		this._email = email;
 		this._username = username;
 	}
@@ -36,11 +33,11 @@ export class RegisterResponse {
 	}
 
 	// Getter and Setter for password
-	public get authentication(): RegisterAuthentication | undefined {
-		return this._authentication;
+	public get password(): string | undefined {
+		return this._password;
 	}
 
-	public set authentication(value: RegisterAuthentication | undefined) {
-		this._authentication = value;
+	public set password(value: string | undefined) {
+		this._password = value;
 	}
 }

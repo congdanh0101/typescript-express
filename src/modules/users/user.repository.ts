@@ -1,6 +1,7 @@
-import { User } from '../model/Users';
-class UserRepository {
-	getUsers = () => User.find();
+import { User } from '../../model/Users';
+
+class UserRepository{
+    getUsers = () => User.find();
 
 	getUserByEmail = (email: string) => User.findOne({ email });
 
@@ -19,4 +20,4 @@ class UserRepository {
 		User.findByIdAndUpdate(id, values);
 }
 
-export default new UserRepository();
+export default UserRepository;

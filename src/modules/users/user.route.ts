@@ -2,13 +2,15 @@
 import UserController from './user.controller';
 import BaseRouter from '../../interfaces/router.inteface';
 import { HTTP_METHOD } from '../../enums/http_method.enum';
-import isAuthenticate from '../../middleware/authenticate.middleware';
+import isAuthenticate, {
+	verifyToken
+} from '../../middleware/authenticate.middleware';
 
 // const router = express.Router();
 
 const UserRouter: BaseRouter = {
 	module: 'user',
-    middleware: [isAuthenticate],
+	middleware: [verifyToken],
 	detail: [
 		{
 			path: '/all',

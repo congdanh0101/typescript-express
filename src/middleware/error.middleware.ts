@@ -7,6 +7,7 @@ export default function errorHandler(
 	res: Response,
 	next: NextFunction
 ): any {
+	console.error(error);
 	return res.status(error.status || 500).json({
 		success: false,
 		message: error.message,
