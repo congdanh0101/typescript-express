@@ -1,28 +1,19 @@
 // import express, { NextFunction, Request, Response } from 'express';
-import AuthController from './auth.controller';
+import UserController from './user.controller';
 import BaseRouter from '../../interfaces/router.inteface';
 import { HTTP_METHOD } from '../../enums/http_method.enum';
+import isAuthenticate from '../../middleware/authenticate.middleware';
 
 // const router = express.Router();
 
-const AuthRouter: BaseRouter = {
-	module: 'auth',
-	// middleware: [],
+const UserRouter: BaseRouter = {
+	module: 'user',
+    middleware: [isAuthenticate],
 	detail: [
 		{
-			path: '/register',
-			method: HTTP_METHOD.POST,
-			action: AuthController.register
-		},
-		{
-			path: '/hello',
+			path: '/all',
 			method: HTTP_METHOD.GET,
-			action: AuthController.helloWord
-		},
-		{
-			path: '/login',
-			method: HTTP_METHOD.POST,
-			action: AuthController.login
+			action: UserController.getAllUsers
 		}
 	]
 };
@@ -39,4 +30,4 @@ const AuthRouter: BaseRouter = {
 
 // export default router;
 
-export default AuthRouter;
+export default UserRouter;

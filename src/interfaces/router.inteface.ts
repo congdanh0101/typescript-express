@@ -15,6 +15,9 @@ interface DetailBaseRouter {
 }
 
 export default interface BaseRouter {
+	middleware?: Array<
+		(req: Request, res: Response, next: NextFunction) => void
+	>;
 	module: string;
 	detail: DetailBaseRouter[];
 }

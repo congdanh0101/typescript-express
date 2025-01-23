@@ -61,23 +61,37 @@ class AuthService {
 			const existedUser = await UserRepository.getUserByEmail(
 				loginRequest.email
 			).select('+authentication.salt + authentication.password');
-
+			console.log(existedUser);
 			if (!existedUser) {
 				throw createHttpError.BadRequest(
 					'Email or password is invalid, please try again!'
 				);
 			}
 
-			// const expectedHash = authentication(
-			// 	existedUser.authentication?.salt,
-			// 	loginRequest.password
-			// );
+			const expectedHash = authentication(
+				existedUser.authentication?.salt ?? '',
+				loginRequest.password
+			);
 
-			// if (existedUser.authentication?.password !== expectedHash) {
-			// 	throw createHttpError.BadRequest(
-			// 		'Email or password is invalid, please try again!'
-			// 	);
-			// }
+			console.log(`expected hash ${expectedHash}`);
+
+			if (existedUser.authentication?.password !== expectedHash) {
+				throw createHttpError.BadRequest(
+					'Email or password is invalid, please try again!'
+				);
+			}
+
+			const salt = random();
+			existedUser.authentication.sessionToken = authentication(
+				salt,
+				existedUser._id.toString()
+			);
+			console.log(existedUser);
+
+			await existedUser.save();
+			console.log(existedUser);
+
+			return existedUser;
 		} catch (error) {
 			throw error;
 		}

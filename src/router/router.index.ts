@@ -4,6 +4,8 @@ import BaseRouter from '../interfaces/router.inteface';
 import AuthRouter from '../modules/auth/auth.route';
 import dotenv from 'dotenv';
 import errorHandler from '../middleware/error.middleware';
+import UserRouter from '../modules/users/user.route';
+import isAuthenticate from '../middleware/authenticate.middleware';
 
 dotenv.config();
 
@@ -21,14 +23,18 @@ dotenv.config();
 // 	}
 // }
 
-const routers: BaseRouter[] = [AuthRouter];
+const routers: BaseRouter[] = [AuthRouter, UserRouter];
 
 export default function router(app: express.Application, url: string) {
 	const router = express.Router();
-
+	// app.use(isAuthenticate);
 	routers.forEach((r) => {
 		r.detail.forEach((detail) => {
-			router[detail.method](detail.path, detail.action);
+			router[detail.method](
+				detail.path,
+				r.middleware ?? [],
+				detail.action
+			);
 		});
 		app.use(`${url}/${r.module}`, router);
 	});

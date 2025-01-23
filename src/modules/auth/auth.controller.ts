@@ -34,8 +34,16 @@ class AuthController {
 		}
 	};
 
-	public login = (req: Request, res: Response, next: NextFunction) => {
-		const data : LoginRequest = req.body;
+	public login = async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const data: LoginRequest = req.body;
+			return res
+				.status(200)
+				.json(await this.authService.login(data))
+				.end();
+		} catch (error) {
+			return next(error);
+		}
 	};
 
 	public helloWord = (req: Request, res: Response, next: NextFunction) => {
